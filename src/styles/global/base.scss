@@ -1,0 +1,14 @@
+html,
+body {
+	font-family: var(--font-family-primary);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: var(--light-dark-color);
+	font-weight: var(--font-family-normal);
+}
+
+body {
+	background: var(--primary-color);
+	background: -webkit-linear-gradient(to left, var(--primary-color), var(--secondary-color));
+	background: linear-gradient(to left, var(--primary-color), var(--secondary-color));
+}
