@@ -15,6 +15,7 @@
       type="text"
       class="edit"
       v-focus
+      :checked="todo.completed"
     />
     <label :for="'checkbox-' + todo.id" class="todos__item-label">{{todo.title}}</label>
     <div class="todos__item-actions">
@@ -34,7 +35,12 @@
 <script>
 export default {
   name: "TodoItem",
-  props: ["todo"],
+  props: {
+    todo: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       beforeEditCache: "",
@@ -186,6 +192,14 @@ export default {
       .todos__item-actions {
         opacity: 1;
         visibility: visible;
+      }
+    }
+
+    &.is-completed {
+      .todos__item-label {
+        &::after {
+          transform: translateY(-50%) scale(1);
+        }
       }
     }
   }

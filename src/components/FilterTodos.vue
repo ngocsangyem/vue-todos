@@ -1,14 +1,35 @@
 <template>
   <ul class="todos__filter">
-    <li class="todos__filter-item">All</li>
-    <li class="todos__filter-item">Active</li>
-    <li class="todos__filter-item">Complete</li>
+    <li
+      class="todos__filter-item"
+      :class="{'is-active': filter === 'all'}"
+      @click="updateFilter('all')"
+    >All</li>
+    <li
+      class="todos__filter-item"
+      :class="{'is-active': filter === 'active'}"
+      @click="updateFilter('active')"
+    >Active</li>
+    <li
+      class="todos__filter-item"
+      :class="{'is-active': filter === 'completed'}"
+      @click="updateFilter('completed')"
+    >Completed</li>
   </ul>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "FilterTodos",
+  computed: {
+    filter() {
+      return this.$store.state.todos.filter;
+    },
+  },
+  methods: {
+    ...mapActions(["updateFilter"]),
+  },
 };
 </script>
 <style lang="scss" scoped>
