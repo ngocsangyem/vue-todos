@@ -3,13 +3,15 @@
     <TodoItem
       v-on:del-todo="$emit('del-todo', todo.id)"
       :key="todo.id"
-      v-for="todo in todos"
+      v-for="todo in getTodos"
       :todo="todo"
     />
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import TodoItem from "./TodoItem";
 
 export default {
@@ -18,6 +20,7 @@ export default {
   components: {
     TodoItem,
   },
+  computed: mapGetters(["getTodos"]),
 };
 </script>
 
