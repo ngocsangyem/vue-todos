@@ -39,7 +39,7 @@ export default {
       &:checked {
         ~ label {
           &::after {
-            transform: scale(1);
+            transform: translateY(-50%) scale(1);
           }
         }
       }
@@ -80,10 +80,11 @@ export default {
         font-weight: 900;
 
         color: var(--primary-color);
-        transform: scale(0);
+        transform: translateY(-50%) scale(0);
         transition: transform 0.3s ease-in-out;
 
         left: 9px;
+        top: 50%;
       }
     }
 
