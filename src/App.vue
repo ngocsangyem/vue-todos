@@ -3,10 +3,10 @@
     <div class="todos">
       <div class="todos__header">
         <FilterTodos />
-        <AddTodo v-on:add-todo="onAddTodo" />
+        <AddTodo />
       </div>
       <div class="todos__body">
-        <Todos v-bind:todos="todos" v-on:del-todo="onDeleteTodo" />
+        <Todos />
       </div>
     </div>
   </div>
@@ -30,15 +30,6 @@ export default {
     return {
       todos: [],
     };
-  },
-
-  methods: {
-    onDeleteTodo(id) {
-      this.todos = this.todos.filter((todo) => todo.id !== id);
-    },
-    onAddTodo(newTodo) {
-      this.todos = [newTodo, ...this.todos];
-    },
   },
 };
 </script>

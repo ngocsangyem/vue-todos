@@ -8,12 +8,13 @@
       placeholder="Add todo"
       required
       v-model="title"
-      v-on:keyup.enter="addTodo"
+      v-on:keyup.enter="onAddTodo"
     />
     <span class="todos__add-border"></span>
   </div>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "AddTodo",
   data() {
@@ -22,14 +23,13 @@ export default {
     };
   },
   methods: {
-    addTodo() {
-      const newTodo = {
-        id: Date.now() + 1,
+    ...mapActions(["addTodo"]),
+    onAddTodo() {
+      this.addTodo({
+        id: Date.now(),
         title: this.title,
         completed: false,
-      };
-
-      this.$emit("add-todo", newTodo);
+      });
       this.title = "";
     },
   },
