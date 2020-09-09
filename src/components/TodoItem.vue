@@ -6,19 +6,64 @@
       type="checkbox"
       :id="'checkbox-' + todo.id"
     />
+    <input
+      v-if="todo.editing"
+      v-model="todo.title"
+      @blur="doneEdit(todo)"
+      @keyup.enter="doneEdit(todo)"
+      @keyup.esc="cancleEdit(todo)"
+      type="text"
+      class="edit"
+      v-focus
+    />
     <label :for="'checkbox-' + todo.id" class="todos__item-label">{{todo.title}}</label>
-    <button @click="$emit('del-todo', todo.id)" type="button" class="todos__item-delete">
-      <i class="fas fa-trash"></i>
-    </button>
+    <div class="todos__item-actions">
+      <button @click="editTodo(todo)" type="button" class="todos__item-action todos__item-edit">
+        <i class="fas fa-pencil-alt"></i>
+      </button>
+      <button
+        @click="$emit('del-todo', todo.id)"
+        type="button"
+        class="todos__item-action todos__item-delete"
+      >
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
   </div>
 </template>
 <script>
 export default {
   name: "TodoItem",
   props: ["todo"],
+  data() {
+    return {
+      beforeEditCache: "",
+    };
+  },
+  directives: {
+    focus: {
+      inserted: function (el) {
+        el.focus();
+      },
+    },
+  },
   methods: {
     markComplete() {
       this.todo.completed = !this.todo.completed;
+    },
+    editTodo(todo) {
+      this.beforeEditCache = todo.title;
+      todo.editing = true;
+    },
+    doneEdit(todo) {
+      if (todo.title.trim() === "") {
+        todo.title = this.beforeEditCache;
+      }
+      todo.editing = false;
+    },
+    cancleEdit(todo) {
+      this.title = this.beforeEditCache;
+      todo.editing = false;
     },
   },
 };
@@ -30,6 +75,20 @@ export default {
     position: relative;
 
     margin-bottom: 2rem;
+
+    .edit {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+
+      width: calc(100% - 20px);
+      height: rem(34px);
+      border: 1px solid var(--neutral-shade-color-2);
+      font-size: 1rem;
+
+      padding: 0 10px;
+    }
 
     &-checkbox {
       position: absolute;
@@ -48,29 +107,25 @@ export default {
     &-label {
       position: relative;
 
-      padding-left: rem(45px);
-
       cursor: pointer;
       user-select: none;
-      display: block;
+      display: flex;
+      align-items: center;
 
       font-size: 1rem;
-      &::before,
-      &::after {
+      &::after,
+      &::before {
         content: "";
-
-        position: absolute;
-        left: 0;
       }
 
-      &:before {
+      &::before {
+        display: inline-block;
         width: rem(30px);
         height: rem(30px);
         border-radius: 50%;
         border: 2px solid var(--secondary-color);
 
-        top: 50%;
-        transform: translateY(-50%);
+        margin-right: rem(10px);
       }
 
       &::after {
@@ -83,30 +138,44 @@ export default {
         transform: translateY(-50%) scale(0);
         transition: transform 0.3s ease-in-out;
 
+        position: absolute;
+        left: 0;
         left: 9px;
         top: 50%;
       }
     }
 
-    &-delete {
-      background-color: transparent;
-      border: none;
-      color: var(--red);
-      position: relative;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease-in-out;
-
-      font-size: 1rem;
+    &-actions {
+      display: flex;
 
       position: absolute;
       top: 50%;
       right: 0;
       z-index: 1;
 
+      opacity: 0;
+      visibility: hidden;
       transform: translateY(-50%);
+      transition: all 0.3s ease-in-out;
+    }
+
+    &-action {
+      background-color: transparent;
+      border: none;
+
+      font-size: 1rem;
 
       cursor: pointer;
+    }
+
+    &-edit {
+      color: var(--green);
+    }
+
+    &-delete {
+      color: var(--red);
+
+      margin-left: 0.5rem;
     }
 
     &:last-child {
@@ -114,7 +183,7 @@ export default {
     }
 
     &:hover {
-      .todos__item-delete {
+      .todos__item-actions {
         opacity: 1;
         visibility: visible;
       }
