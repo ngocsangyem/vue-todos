@@ -31,13 +31,14 @@ const actions = {
 	deleteTodo({
 		commit
 	}, id) {
+
 		commit('removeTodo', id);
 	}
 };
 
 const mutations = {
 	newTodo: (state, todo) => state.todos.unshift(todo),
-	removeTodo: (state, id) => state.todos.splice(state.todos.findIndex(todo => todo.id === id), 1)
+	removeTodo: (state, id) => state.todos = state.todos.filter(todo => todo.id !== id)
 };
 
 export default {
